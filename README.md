@@ -2,6 +2,8 @@
 
 Dungeon Ascend is a 2.5D isometric rogue-like dungeon crawler built in Unity. In this game, you play as a hero fighting your way through randomly generated dungeons, facing enemies, and collecting loot to survive. The game features WASD movement and mouse-based aiming for combat.
 
+This project is primarily made for my University Thesis but also a great opportunity to enchance my Unity skills.
+
 ## Features
 - **WASD Movement**: Move your character using the WASD keys.
 - **Mouse Aiming**: Aim and attack enemies with using the mouse.
