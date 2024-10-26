@@ -11,11 +11,10 @@ This project is primarily made for my University Thesis but also a great opportu
  - [x] **Mouse Aiming**: Aim and attack enemies with using the mouse.  
  - [x] **Melee Combat**: Use a sword for close-range combat.  
  - [x] **Enemy AI**: Fight against enemies with basic attack patterns.  
- - [ ] **Health & Damage System**: Manage your health while battling enemies. 
- - [ ] **Basic Loot System**: Collect items like health potions from defeated enemies. 
- - [ ] **Simple Dungeon Exploration**: Explore a small, handcrafted dungeon.
- - [ ]  **Somewhat Procedural Dungeon Generation**: Implement a basic procedural generation system to create random dungeons with different room layouts for each playthrough. This could include connecting a set of pre-designed rooms in random configurations.
- - [ ]  **UI Elements**: Add health and inventory indicators on the screen so the player can monitor their status during gameplay.
+ - [x] **Health & Damage System**: Manage your health while battling enemies.  
+ - [x] **Simple Dungeon Exploration**: Explore a small, handcrafted dungeon.
+ - [x]  **Somewhat Procedural Dungeon Generation**: Implement a basic procedural generation system to create random dungeons with different room layouts for each playthrough. This could include connecting a set of pre-designed rooms in random configurations.
+ - [x]  **UI Elements**: Add health and inventory indicators on the screen so the player can monitor their status during gameplay.
  - [ ] **Game Polishing**: Test and fine-tune the combat mechanics, adjust enemy difficulty, and add visual/audio polish to enhance the gameplay experience.
 
  
@@ -24,6 +23,7 @@ This project is primarily made for my University Thesis but also a great opportu
 - **Attack**: `Left Click` to attack in the direction of the mouse
 
 ## Future Improvements
+- **Inventory System**
 - **Additional Weapons**: Add ranged weapons like a bow or staff.
 - **Level Design**: Expand the dungeon with more rooms and traps.
 - **Enemy Variety**: Introduce new enemy types with unique attack patterns.
