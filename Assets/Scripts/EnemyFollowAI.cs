@@ -12,6 +12,7 @@ public class EnemyFollowAI : MonoBehaviour
         // Get the NavMeshAgent component on this enemy
         navAgent = GetComponent<NavMeshAgent>();
         enemyController = GetComponent<EnemyController>();
+        playerTransform = GameObject.Find("Player(Clone)").transform;
 
         // Set the NavMeshAgent's speed to match the moveSpeed from EnemyData
         if (enemyController != null && enemyController.enemyData != null)

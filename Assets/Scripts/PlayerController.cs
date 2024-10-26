@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,105 +11,128 @@ public class PlayerController : MonoBehaviour
     private Camera mainCamera;
     private Animator animator;
     private bool isMoving;
-    private float lastAttackTime; 
-    public float attackDamage = 20f;
+    private float lastAttackTime;
+    public float attackDamage = 5f;
     public float attackRange = 2.0f;
     public float attackAngle = 45f;
 
+    public const float maxHealth = 100f;
+    public float currentHealth;
+
+    public int currentCoins = 0;
+
+    public TextMeshProUGUI coinCounter;
+    public HealthBar healthBar;
+
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
-        mainCamera = Camera.main;  
-        animator = gameObject.GetComponent<Animator>(); 
+        rb = GetComponent<Rigidbody>();
+        mainCamera = Camera.main;
+        animator = GetComponent<Animator>();
 
-        lastAttackTime = -equippedWeapon.cooldownTime;
+        // Initialize health and coin count UI
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+        UpdateCoinUI();
     }
 
     void Update()
     {
-        // Capture WASD or arrow key inputs
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
 
-        // Determine movement direction
         movement = new Vector3(moveX, 0f, moveZ).normalized;
+        isMoving = movement.magnitude > 0f;
+        animator.SetBool("isMoving", isMoving);
 
-        isMoving = movement.magnitude > 0f;        
-        animator.SetBool("isMoving", isMoving);  // Set the animator parameter
-
-        // Rotate player to face the mouse
         RotatePlayerToMouse();
 
-        // Check for primary attack (MB1) and if cooldown has passed
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + equippedWeapon.cooldownTime)
         {
             PerformAttack();
-            lastAttackTime = Time.time;  // Update the time of the last attack
+            lastAttackTime = Time.time;
         }
     }
 
     void FixedUpdate()
     {
-        // Move the player using Rigidbody
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
     void RotatePlayerToMouse()
     {
-        // Get the mouse position in world space
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);  // Assuming the ground is on the XZ plane
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         float rayLength;
 
         if (groundPlane.Raycast(ray, out rayLength))
         {
             Vector3 pointToLook = ray.GetPoint(rayLength);
-
-            // Calculate the direction from the player to the mouse position
             Vector3 direction = (pointToLook - transform.position).normalized;
-            direction.y = 0;  // Ensure the player stays on the XZ plane
+            direction.y = 0;
 
-            // Rotate the player to face the direction of the mouse
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            rb.MoveRotation(lookRotation);  // Rotate using Rigidbody to keep physics consistency
+            rb.MoveRotation(lookRotation);
         }
     }
 
     void PerformAttack()
     {
-        // Trigger the animation
-        animator.SetTrigger("primaryAttack");     
+        animator.SetTrigger("primaryAttack");
     }
 
-     public void DealDamageToEnemy()
+    public void DealDamageToEnemy()
     {
-        // Find all colliders within the attack range
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange);
 
         foreach (Collider enemyCollider in hitEnemies)
         {
-            // Check if the collider has the EnemyController component
             EnemyController enemy = enemyCollider.GetComponent<EnemyController>();
             if (enemy != null)
             {
-                // Calculate the direction from the player to the enemy
                 Vector3 directionToEnemy = (enemy.transform.position - transform.position).normalized;
-
-                // Check if the enemy is within the specified angle in front of the player
                 float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
                 if (angleToEnemy <= attackAngle / 2)
                 {
-                    // Deal damage to the enemy
-                    enemy.TakeDamage(0f);
-                    Debug.Log("Dealt " + attackDamage + " damage to " + enemy.name);
+                    enemy.TakeDamage(attackDamage);
                 }
             }
         }
     }
 
-    public void EquipWeapon(Weapon newWeapon)
+    public void AddCoins(int amount)
     {
-        equippedWeapon = newWeapon;
-        lastAttackTime = -equippedWeapon.cooldownTime; // Reset cooldown for immediate use
+        currentCoins += amount;
+        UpdateCoinUI();
+    }
+
+    private void UpdateCoinUI()
+    {
+        if (coinCounter != null)
+        {
+            coinCounter.text = currentCoins.ToString();
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        currentHealth -= amount;
+        healthBar.SetHealth(currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void RestoreHealth(int amount)
+    {
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        healthBar.SetHealth(currentHealth);
+    }
+
+    private void Die()
+    {
+        // TODO: HALÁL 
     }
 }

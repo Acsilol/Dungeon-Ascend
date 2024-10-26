@@ -15,4 +15,4 @@ MonoBehaviour:
   enemyName: Skeleton
   maxHealth: 20
   damage: 5
-  moveSpeed: 0.5
+  moveSpeed: 2
